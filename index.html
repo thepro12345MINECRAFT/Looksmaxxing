@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Looksmaxxing Ascension — MOGGED</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <!-- FastSpring -->
+  <script
+    id="fsc-api"
+    src="https://sbl.onfastspring.com/sbl/1.0.6/fastspring-builder.min.js"
+    type="text/javascript"
+    data-storefront="coooooooool.test.onfastspring.com/popup-coooooooool"
+    data-popup-webhook-received="onFastSpringPurchase">
+  </script>
+  <style>
+    :root {
+      --navy: #0a0e1a;
+      --deep: #060910;
+      --cyan: #00d4ff;
+      --orange: #ff6b35;
+      --red-stamp: #e63946;
+      --gold: #ffd60a;
+      --green-check: #4ade80;
+      --card-bg: rgba(255,255,255,0.04);
+      --card-border: rgba(0,212,255,0.12);
+      --text: #e8eaf0;
+      --muted: #7a8099;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+    .grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(6,9,16,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,212,255,0.1);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #fff; line-height: 1; }
+    .nav-logo span { color: var(--cyan); }
+    .nav-logo .stamp { display: inline-block; background: var(--red-stamp); color: #fff; font-size: 10px; padding: 2px 5px; margin-left: 6px; transform: rotate(-4deg); vertical-align: middle; letter-spacing: 1px; }
+    .nav-cta { background: var(--cyan); color: var(--deep); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 24px; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .nav-cta:hover { background: #fff; transform: translateY(-1px); }
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 20px 80px; overflow: hidden; }
+    .hero-glow { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 5px; text-transform: uppercase; color: var(--cyan); margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 14vw, 160px); line-height: 0.88; letter-spacing: 4px; color: #fff; position: relative; z-index: 1; opacity: 0; animation: fadeUp 0.9s ease forwards 0.4s; }
+    .hero-title .accent { color: var(--cyan); }
+    .mogged-stamp { display: inline-block; background: var(--red-stamp); color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 5vw, 52px); letter-spacing: 3px; padding: 4px 20px; transform: rotate(-3deg); margin-top: 8px; box-shadow: 4px 4px 0px rgba(0,0,0,0.5); opacity: 0; animation: fadeUp 0.9s ease forwards 0.55s; }
+    .hero-sub { font-size: clamp(16px, 2.5vw, 22px); font-weight: 300; color: var(--muted); max-width: 560px; margin: 32px auto 0; opacity: 0; animation: fadeUp 0.9s ease forwards 0.7s; }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
+    .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-top: 48px; opacity: 0; animation: fadeUp 0.9s ease forwards 0.85s; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--cyan); line-height: 1; }
+    .stat-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+    .hero-cta-wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 48px; opacity: 0; animation: fadeUp 0.9s ease forwards 1s; }
+    .btn-primary { display: inline-block; background: var(--cyan); color: var(--deep); font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; padding: 18px 48px; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; }
+    .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%); transform: translateX(-100%); transition: transform 0.5s; }
+    .btn-primary:hover::after { transform: translateX(100%); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,212,255,0.35); }
+    .btn-ghost { display: inline-block; border: 1px solid rgba(255,255,255,0.2); color: var(--text); font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; padding: 18px 36px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+    section { position: relative; z-index: 1; }
+    .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 5px; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 7vw, 80px); line-height: 0.95; letter-spacing: 2px; color: #fff; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .modules-section { padding: 100px 0; background: linear-gradient(180deg, var(--navy) 0%, var(--deep) 50%, var(--navy) 100%); }
+    .modules-header { text-align: center; margin-bottom: 64px; }
+    .modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; }
+    .module-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 32px; position: relative; overflow: hidden; transition: all 0.3s; }
+    .module-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0; transition: opacity 0.3s; }
+    .module-card:hover { background: rgba(0,212,255,0.06); }
+    .module-card:hover::before { opacity: 1; }
+    .module-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: rgba(0,212,255,0.15); line-height: 1; margin-bottom: 12px; }
+    .module-name { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 1px; color: #fff; margin-bottom: 10px; }
+    .module-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .module-tag { display: inline-block; margin-top: 16px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); padding: 4px 12px; }
+    .transform-section { padding: 100px 0; border-top: 1px solid rgba(0,212,255,0.08); border-bottom: 1px solid rgba(0,212,255,0.08); }
+    .transform-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 768px) { .transform-layout { grid-template-columns: 1fr; gap: 40px; } }
+    .checklist { list-style: none; margin-top: 32px; }
+    .checklist li { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 16px; }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon { width: 22px; height: 22px; background: var(--green-check); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-size: 12px; }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--cyan), transparent); }
+    .timeline-item { position: relative; margin-bottom: 32px; }
+    .timeline-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+    .timeline-week { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--cyan); margin-bottom: 4px; }
+    .timeline-result { font-size: 17px; color: #fff; font-weight: 600; }
+    .timeline-desc { font-size: 14px; color: var(--muted); margin-top: 4px; }
+    /* PRICING */
+    .pricing-section { padding: 100px 0; text-align: center; }
+    .pricing-card { max-width: 520px; margin: 48px auto 0; background: var(--card-bg); border: 1px solid var(--card-border); padding: 48px 40px; position: relative; overflow: hidden; }
+    .pricing-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--cyan), var(--orange)); }
+    .pricing-badge { display: inline-block; background: var(--orange); color: #fff; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 18px; margin-bottom: 24px; }
+    .price-strike { font-size: 22px; color: var(--muted); text-decoration: line-through; margin-bottom: 4px; }
+    .price-main { font-family: 'Bebas Neue', sans-serif; font-size: 96px; color: #fff; line-height: 1; margin-bottom: 4px; }
+    .price-main span { font-size: 40px; vertical-align: top; margin-top: 20px; display: inline-block; }
+    .price-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+    .price-includes { text-align: left; list-style: none; margin-bottom: 32px; }
+    .price-includes li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 15px; display: flex; gap: 12px; align-items: center; }
+    .price-includes li:last-child { border-bottom: none; }
+    .pi-icon { color: var(--cyan); font-size: 16px; }
+    .guarantee { margin-top: 24px; padding: 20px; border: 1px solid rgba(74,222,128,0.2); display: flex; gap: 16px; align-items: center; text-align: left; }
+    .guarantee-icon { font-size: 32px; }
+    .guarantee-text { font-size: 13px; color: var(--muted); }
+    .guarantee-text strong { color: var(--green-check); }
+    /* BUY BUTTON */
+    .buy-btn {
+      display: block; width: 100%;
+      background: var(--cyan); color: var(--deep);
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: 20px; letter-spacing: 3px; text-transform: uppercase;
+      padding: 22px; border: none; cursor: pointer;
+      transition: all 0.2s; position: relative; overflow: hidden;
+    }
+    .buy-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: 0.5s; }
+    .buy-btn:hover::after { transform: translateX(100%); }
+    .buy-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,212,255,0.4); }
+    /* SUCCESS MODAL */
+    .success-overlay { position: fixed; inset: 0; background: rgba(6,9,16,0.95); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .success-overlay.show { display: flex; }
+    .success-modal { background: var(--deep); border: 1px solid rgba(74,222,128,0.3); max-width: 500px; width: 100%; padding: 48px 40px; text-align: center; position: relative; }
+    .success-modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--green-check), var(--cyan)); }
+    .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--green-check); letter-spacing: 2px; }
+    .success-sub { color: var(--muted); font-size: 16px; margin-top: 12px; line-height: 1.7; }
+    .success-sub strong { color: var(--text); }
+    /* FAQ */
+    .faq-section { padding: 100px 0; background: var(--deep); }
+    .faq-header { text-align: center; margin-bottom: 64px; }
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .faq-q { width: 100%; background: none; border: none; color: var(--text); font-family: 'Barlow', sans-serif; font-size: 17px; font-weight: 600; text-align: left; padding: 24px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-q:hover { color: var(--cyan); }
+    .faq-icon { font-size: 22px; transition: transform 0.3s; flex-shrink: 0; color: var(--cyan); }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { font-size: 15px; color: var(--muted); max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+    .faq-item.open .faq-a { max-height: 300px; padding-bottom: 24px; }
+    .footer-cta { padding: 100px 0; text-align: center; position: relative; overflow: hidden; }
+    .footer-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,212,255,0.08) 0%, transparent 70%); }
+    .footer-cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 100px); line-height: 0.95; letter-spacing: 3px; color: #fff; margin-bottom: 24px; }
+    .footer-cta-title .line2 { color: var(--cyan); }
+    footer { padding: 32px 40px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer .logo-sm { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; color: var(--muted); }
+    footer p { font-size: 12px; color: var(--muted); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .testi-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 28px; }
+    .testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; letter-spacing: 3px; }
+    .testi-text { font-size: 15px; color: var(--text); line-height: 1.7; font-style: italic; margin-bottom: 20px; }
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+    .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan), var(--orange)); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--deep); }
+    .testi-name { font-weight: 600; font-size: 15px; }
+    .testi-meta { font-size: 12px; color: var(--cyan); }
+    .testimonials-section { padding: 100px 0; }
+    .testimonials-header { text-align: center; margin-bottom: 64px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) { nav { padding: 16px 20px; } .hero-stats { gap: 24px; } .pricing-card { padding: 32px 24px; } footer { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+
+  <!-- SUCCESS MODAL (shown after purchase) -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-modal">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">YOU'RE IN.</div>
+      <p class="success-sub">
+        Your purchase is confirmed. <strong>Check your email</strong> — your login credentials for the course portal will arrive within a few minutes.<br><br>
+        Head to <strong>course.html</strong> and use your username &amp; password to access all 129 lessons.
+      </p>
+      <br>
+      <a href="course.html" class="buy-btn" style="text-decoration:none; display:inline-block; padding: 16px 40px; width:auto;">
+        Go to Course Portal →
+      </a>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">LOOKSMAXXING <span>ASCENSION</span><span class="stamp">MOGGED</span></div>
+    <button class="nav-cta" onclick="triggerCheckout()">Enroll Now →</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="grid-bg"></div>
+    <div class="hero-glow"></div>
+    <p class="hero-eyebrow">The definitive system for appearance transformation</p>
+    <h1 class="hero-title">LOOKSMAXXING<br><span class="accent">ASCENSION</span></h1>
+    <div class="mogged-stamp">MOGGED</div>
+    <p class="hero-sub">129 lessons. 13 modules. 6.2 hours of <strong>evidence-based content</strong> that turns self-improvement theory into a systematic, trackable transformation protocol.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">129</div><div class="stat-label">Lessons</div></div>
+      <div class="stat"><div class="stat-num">13</div><div class="stat-label">Modules</div></div>
+      <div class="stat"><div class="stat-num">6.2</div><div class="stat-label">Hours</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Lifetime Access</div></div>
+    </div>
+    <div class="hero-cta-wrap">
+      <button class="btn-primary" onclick="triggerCheckout()">Get Instant Access</button>
+      <a href="#modules" class="btn-ghost">View Curriculum ↓</a>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="modules-section" id="modules">
+    <div class="container">
+      <div class="modules-header reveal">
+        <p class="section-label">The curriculum</p>
+        <h2 class="section-title">13 MODULES.<br>ZERO FILLER.</h2>
+        <p style="color:var(--muted);margin-top:16px;max-width:540px;margin-left:auto;margin-right:auto;font-size:16px;">Every lesson is built on dermatology research, exercise science, and real-world results — not forum anecdotes.</p>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card reveal"><div class="module-num">01</div><div class="module-name">Mindset & the Ascension Framework</div><div class="module-desc">Understand the hierarchy of improvements. Learn which levers move the needle most and why 80% of guys waste months on the wrong things.</div><div class="module-tag">Foundation</div></div>
+        <div class="module-card reveal"><div class="module-num">02</div><div class="module-name">Skincare Science & Routine Building</div><div class="module-desc">Cleansing, moisturizing, SPF, retinoids, vitamin C, AHA/BHA. Build morning and evening protocols that actually clear and brighten your skin.</div><div class="module-tag">Skincare</div></div>
+        <div class="module-card reveal"><div class="module-num">03</div><div class="module-name">Facial Aesthetics & Facemaxxing</div><div class="module-desc">Eyebrow grooming, under-eye care, jawline definition through fat loss, mewing fundamentals, and the masseter exercise protocol.</div><div class="module-tag">Face</div></div>
+        <div class="module-card reveal"><div class="module-num">04</div><div class="module-name">Hair: Cut, Health & Hairline</div><div class="module-desc">Choosing a cut for your face shape, hair growth science, DHT blockers, thickening shampoos, and when to see a dermatologist.</div><div class="module-tag">Hair</div></div>
+        <div class="module-card reveal"><div class="module-num">05</div><div class="module-name">Body Composition & Physique</div><div class="module-desc">Cut first if above 15% body fat — we explain why. Full training split, shoulder-to-waist optimization, posture correction built in.</div><div class="module-tag">Fitness</div></div>
+        <div class="module-card reveal"><div class="module-num">06</div><div class="module-name">Nutrition for Looks</div><div class="module-desc">Macros for body recomposition, anti-inflammatory foods for clear skin, hydration protocols, and supplements with actual evidence.</div><div class="module-tag">Nutrition</div></div>
+        <div class="module-card reveal"><div class="module-num">07</div><div class="module-name">Grooming Mastery</div><div class="module-desc">Beard strategy for your jaw shape, nail hygiene, body hair management, and the complete dental care system.</div><div class="module-tag">Grooming</div></div>
+        <div class="module-card reveal"><div class="module-num">08</div><div class="module-name">Style & Wardrobe Architecture</div><div class="module-desc">Fit over brand, every time. Capsule wardrobe for your body type, color theory for your skin tone, accessories that elevate.</div><div class="module-tag">Style</div></div>
+        <div class="module-card reveal"><div class="module-num">09</div><div class="module-name">Posture, Body Language & Presence</div><div class="module-desc">The free unlock most ignore. Posture changes how clothes fit, how your face reads, and how you're perceived before you speak.</div><div class="module-tag">Presence</div></div>
+        <div class="module-card reveal"><div class="module-num">10</div><div class="module-name">Sleep Optimization</div><div class="module-desc">Dark circles, puffy face, dull skin — all addressed. Build a sleep protocol that shows in your skin by week two.</div><div class="module-tag">Recovery</div></div>
+        <div class="module-card reveal"><div class="module-num">11</div><div class="module-name">Advanced: Softmaxxing Upgrades</div><div class="module-desc">Non-invasive dermatology, microdermabrasion, laser options, and the professional consultation guide.</div><div class="module-tag">Advanced</div></div>
+        <div class="module-card reveal"><div class="module-num">12</div><div class="module-name">Progress Tracking & 12-Week System</div><div class="module-desc">Objective measurement over feelings. How to read your own progress and adjust the full stack accordingly.</div><div class="module-tag">Systems</div></div>
+        <div class="module-card reveal"><div class="module-num">13</div><div class="module-name">Mental Edge & Long-Term Maintenance</div><div class="module-desc">Appearance optimization without obsession. Confidence calibration, identity work, maintenance schedule for life.</div><div class="module-tag">Mindset</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSFORM -->
+  <section class="transform-section">
+    <div class="container">
+      <div class="transform-layout">
+        <div class="reveal">
+          <p class="section-label">What you'll achieve</p>
+          <h2 class="section-title">THE COMPOUND EFFECT IS REAL.</h2>
+          <ul class="checklist" style="margin-top:32px;">
+            <li><div class="check-icon">✓</div> Clear, hydrated skin that reads as healthy and high-status</li>
+            <li><div class="check-icon">✓</div> A face that's sharper from fat loss + facial structure work</li>
+            <li><div class="check-icon">✓</div> A physique with visible shoulder-to-waist improvement</li>
+            <li><div class="check-icon">✓</div> Hair and grooming dialed to your actual face shape</li>
+            <li><div class="check-icon">✓</div> A wardrobe that enhances your proportions on day one</li>
+            <li><div class="check-icon">✓</div> Posture and presence that commands attention effortlessly</li>
+          </ul>
+        </div>
+        <div class="reveal">
+          <p class="section-label">Your timeline</p>
+          <div class="timeline">
+            <div class="timeline-item"><div class="timeline-week">Week 1–2</div><div class="timeline-result">Immediate visible results</div><div class="timeline-desc">Grooming, posture, and skincare basics produce changes people notice within days.</div></div>
+            <div class="timeline-item"><div class="timeline-week">Week 3–6</div><div class="timeline-result">Skin starts clearing & brightening</div><div class="timeline-desc">Retinoids and actives begin accelerating cell turnover. Sleep protocol locks in results.</div></div>
+            <div class="timeline-item"><div class="timeline-week">Week 7–10</div><div class="timeline-result">Physique & style compound</div><div class="timeline-desc">Fat loss reveals facial structure. Wardrobe overhaul changes your social presence.</div></div>
+            <div class="timeline-item"><div class="timeline-week">Week 12+</div><div class="timeline-result">You won't recognize yourself</div><div class="timeline-desc">The full stack compounding — most students report a 2–3 point perceived attractiveness increase.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="testimonials-header reveal">
+        <p class="section-label">Student results</p>
+        <h2 class="section-title">REAL GUYS.<br>REAL RESULTS.</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"Did the skincare module first. Within 3 weeks my skin was clearer than it's been since I was 15. The retinoid guide alone was worth the price."</div><div class="testi-author"><div class="testi-avatar">JM</div><div><div class="testi-name">Jake M.</div><div class="testi-meta">Module 2 completion</div></div></div></div>
+        <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"The posture module changed how my clothes fit. I didn't buy a single new item and people started asking if I'd been working out. Insane ROI."</div><div class="testi-author"><div class="testi-avatar">AK</div><div><div class="testi-name">Alex K.</div><div class="testi-meta">Full course completion</div></div></div></div>
+        <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"I'd watched 100 YouTube videos and still didn't have a clear system. This course gave me a protocol. 12 weeks later I'm a different person."</div><div class="testi-author"><div class="testi-avatar">RB</div><div><div class="testi-name">Ryan B.</div><div class="testi-meta">12-week system track</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Enroll today</p>
+        <h2 class="section-title">ONE INVESTMENT.<br>LIFETIME RESULTS.</h2>
+      </div>
+      <div class="pricing-card reveal">
+        <div class="pricing-badge">Limited Launch Pricing</div>
+        <div class="price-strike">$297</div>
+        <div class="price-main"><span>$</span>97</div>
+        <div class="price-sub">One-time payment — lifetime access</div>
+        <ul class="price-includes">
+          <li><span class="pi-icon">▸</span> 129 video lessons across 13 modules</li>
+          <li><span class="pi-icon">▸</span> 6.2 hours of structured, stackable content</li>
+          <li><span class="pi-icon">▸</span> Downloadable routine templates & checklists</li>
+          <li><span class="pi-icon">▸</span> The 12-Week Transformation Tracker (PDF)</li>
+          <li><span class="pi-icon">▸</span> Product reference guide (every pick vetted)</li>
+          <li><span class="pi-icon">▸</span> Lifetime updates — new lessons added free</li>
+          <li><span class="pi-icon">▸</span> Access on any device, anytime</li>
+        </ul>
+        <button class="buy-btn" onclick="triggerCheckout()">GET INSTANT ACCESS — $97 →</button>
+        <div class="guarantee">
+          <div class="guarantee-icon">🛡️</div>
+          <div class="guarantee-text"><strong>30-Day Money-Back Guarantee.</strong> Complete the first three modules. If you don't see measurable changes in 30 days, we'll refund every cent.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="faq-header reveal"><p class="section-label">Questions</p><h2 class="section-title">FAQ</h2></div>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-q">Is this for beginners or people who know the basics?<span class="faq-icon">+</span></button><div class="faq-a">Both. Modules 1–3 are built for someone starting from zero. Modules 7–13 go deep on advanced protocols that even experienced guys typically get wrong.</div></div>
+        <div class="faq-item"><button class="faq-q">How do I access the course after buying?<span class="faq-icon">+</span></button><div class="faq-a">After purchase, you'll receive an email with your username and password. Head to course.html and log in with those credentials. Access is instant and lifetime.</div></div>
+        <div class="faq-item"><button class="faq-q">Does this work if I'm on a tight budget?<span class="faq-icon">+</span></button><div class="faq-a">Yes. The biggest gains come from free changes — posture, sleep, grooming habits, body composition. Every paid recommendation has a budget and premium tier.</div></div>
+        <div class="faq-item"><button class="faq-q">Is the content based on science or forum theories?<span class="faq-icon">+</span></button><div class="faq-a">Science first. Skincare modules are built on dermatology research. Fitness aligns with exercise science. Anything without strong evidence is labeled clearly.</div></div>
+        <div class="faq-item"><button class="faq-q">What if I've already tried other courses?<span class="faq-icon">+</span></button><div class="faq-a">Most courses cover one area. This is the only system that treats appearance as a stack — skin + hair + body + style + posture + sleep — and shows how they compound.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <section class="footer-cta">
+    <div class="container">
+      <div class="reveal">
+        <h2 class="footer-cta-title">STOP WATCHING.<br><span class="line2">START ASCENDING.</span></h2>
+        <p style="color:var(--muted);margin-bottom:40px;font-size:18px;max-width:480px;margin-left:auto;margin-right:auto;">The information is out there. The system, the structure, the accountability — that's what you're getting.</p>
+        <button class="btn-primary" onclick="triggerCheckout()" style="font-size:20px;padding:22px 56px;">Enroll for $97 — Lifetime Access</button>
+        <p style="color:var(--muted);margin-top:20px;font-size:13px;">30-day money-back guarantee. No questions asked.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo-sm">LOOKSMAXXING ASCENSION · MOGGED</div>
+    <p>© 2026 Looksmaxxing Ascension. All rights reserved.</p>
+    <p><a href="#" style="color:var(--muted);text-decoration:none;">Privacy</a> · <a href="#" style="color:var(--muted);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // FAQ
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // FastSpring checkout trigger
+    function triggerCheckout() {
+      if (typeof fastspring !== 'undefined') {
+        fastspring.builder.checkout();
+      } else {
+        // Fallback if FastSpring hasn't loaded
+        console.warn('FastSpring not loaded yet');
+        alert('Loading checkout... please try again in a moment.');
+      }
+    }
+
+    // FastSpring purchase webhook callback
+    function onFastSpringPurchase(data) {
+      if (data && data.order) {
+        document.getElementById('successOverlay').classList.add('show');
+      }
+    }
+  </script>
+</body>
+</html>
