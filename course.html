@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Portal — Looksmaxxing Ascension</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a0e1a;
+      --deep: #060910;
+      --panel: #0e1424;
+      --cyan: #00d4ff;
+      --cyan-dim: rgba(0,212,255,0.12);
+      --orange: #ff6b35;
+      --red-stamp: #e63946;
+      --gold: #ffd60a;
+      --green: #4ade80;
+      --card-bg: rgba(255,255,255,0.03);
+      --card-border: rgba(0,212,255,0.1);
+      --text: #e8eaf0;
+      --muted: #6a7090;
+      --sidebar-w: 300px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { background: var(--navy); color: var(--text); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* ═══════════════════════════════════
+       LOGIN SCREEN
+    ═══════════════════════════════════ */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--deep);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    #loginScreen.hidden { display: none; }
+
+    .login-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .login-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+
+    .login-box {
+      position: relative; z-index: 1;
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      max-width: 420px; width: 100%;
+      padding: 48px 40px;
+    }
+    .login-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--orange));
+    }
+
+    .login-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 3px; color: #fff;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .login-logo span { color: var(--cyan); }
+    .login-stamp {
+      display: inline-block;
+      background: var(--red-stamp); color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px; letter-spacing: 2px;
+      padding: 2px 8px; transform: rotate(-2deg);
+      margin-left: 6px;
+    }
+    .login-sub {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 36px; margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--cyan); }
+    .form-input::placeholder { color: var(--muted); font-size: 14px; }
+
+    .login-btn {
+      width: 100%;
+      background: var(--cyan); color: var(--deep);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 17px;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 16px; border: none; cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .login-btn:hover { background: #fff; transform: translateY(-1px); }
+
+    .login-error {
+      background: rgba(230,57,70,0.15);
+      border: 1px solid rgba(230,57,70,0.3);
+      color: #e63946;
+      padding: 12px 16px;
+      font-size: 14px;
+      margin-top: 16px;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    .login-note {
+      margin-top: 24px;
+      font-size: 12px; color: var(--muted);
+      text-align: center; line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════
+       COURSE APP
+    ═══════════════════════════════════ */
+    #courseApp { display: none; min-height: 100vh; }
+    #courseApp.show { display: flex; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--deep);
+      border-right: 1px solid var(--card-border);
+      display: flex; flex-direction: column;
+      position: fixed; left: 0; top: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 50;
+      transition: transform 0.3s;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 2px; color: #fff;
+      line-height: 1;
+    }
+    .sidebar-logo span { color: var(--cyan); }
+    .sidebar-stamp {
+      display: inline-block;
+      background: var(--red-stamp); color: #fff;
+      font-size: 10px; padding: 1px 5px;
+      transform: rotate(-3deg); margin-left: 4px;
+      font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px;
+    }
+    .sidebar-user {
+      margin-top: 10px;
+      font-size: 12px; color: var(--muted);
+    }
+    .sidebar-user strong { color: var(--cyan); }
+
+    .sidebar-progress {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .progress-label {
+      font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 8px;
+      display: flex; justify-content: space-between;
+    }
+    .progress-bar {
+      height: 4px; background: rgba(255,255,255,0.08);
+      border-radius: 2px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--cyan), var(--orange));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .sidebar-nav { flex: 1; padding: 12px 0; }
+
+    .module-group { margin-bottom: 4px; }
+
+    .module-header-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-align: left;
+    }
+    .module-header-btn:hover { background: rgba(255,255,255,0.04); }
+    .module-header-btn.active { background: rgba(0,212,255,0.06); }
+
+    .mod-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; color: rgba(0,212,255,0.3);
+      line-height: 1; flex-shrink: 0; width: 28px;
+    }
+    .mod-info { flex: 1; }
+    .mod-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.5px; color: var(--text);
+      line-height: 1.3;
+    }
+    .mod-progress {
+      font-size: 11px; color: var(--muted); margin-top: 2px;
+    }
+    .mod-chevron {
+      font-size: 10px; color: var(--muted);
+      transition: transform 0.2s; flex-shrink: 0;
+    }
+    .module-group.open .mod-chevron { transform: rotate(90deg); }
+
+    .lessons-list { overflow: hidden; max-height: 0; transition: max-height 0.35s ease; }
+    .module-group.open .lessons-list { max-height: 600px; }
+
+    .lesson-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 20px 8px 52px;
+      cursor: pointer; transition: background 0.15s;
+      text-align: left;
+    }
+    .lesson-btn:hover { background: rgba(255,255,255,0.03); }
+    .lesson-btn.active { background: rgba(0,212,255,0.08); }
+    .lesson-btn.active .lesson-title { color: var(--cyan); }
+
+    .lesson-check {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      transition: all 0.2s;
+    }
+    .lesson-check.done {
+      background: var(--green); border-color: var(--green);
+      color: var(--deep);
+    }
+    .lesson-title {
+      font-size: 12px; color: var(--muted);
+      line-height: 1.4; flex: 1;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .logout-btn {
+      width: 100%; background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted); font-family: 'Barlow', sans-serif;
+      font-size: 13px; padding: 10px;
+      cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+    }
+    .logout-btn:hover { border-color: var(--red-stamp); color: var(--red-stamp); }
+
+    /* MAIN CONTENT */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      background: rgba(6,9,16,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 40;
+    }
+    .topbar-breadcrumb {
+      font-size: 13px; color: var(--muted);
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 1px;
+    }
+    .topbar-breadcrumb span { color: var(--text); }
+    .topbar-actions { display: flex; gap: 12px; }
+    .mark-done-btn {
+      background: none;
+      border: 1px solid rgba(74,222,128,0.3);
+      color: var(--green);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 8px 18px; cursor: pointer; transition: all 0.2s;
+    }
+    .mark-done-btn:hover { background: rgba(74,222,128,0.1); }
+    .mark-done-btn.done { background: rgba(74,222,128,0.15); }
+    .menu-toggle {
+      display: none;
+      background: none; border: 1px solid var(--card-border);
+      color: var(--text); padding: 8px 12px; cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* LESSON VIEWER */
+    .lesson-viewer {
+      flex: 1; padding: 40px 48px;
+      max-width: 900px;
+    }
+
+    .lesson-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; letter-spacing: 4px;
+      text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .lesson-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 60px);
+      letter-spacing: 2px; color: #fff;
+      line-height: 1; margin-bottom: 24px;
+    }
+
+    .lesson-meta {
+      display: flex; gap: 24px; flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .lesson-meta-item {
+      font-size: 13px; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .lesson-meta-item span { color: var(--text); }
+
+    /* VIDEO PLACEHOLDER */
+    .video-container {
+      background: var(--deep);
+      border: 1px solid var(--card-border);
+      aspect-ratio: 16/9;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-container::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .video-play {
+      width: 72px; height: 72px;
+      background: var(--cyan);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; cursor: pointer;
+      transition: all 0.2s; z-index: 1;
+      color: var(--deep);
+      box-shadow: 0 0 40px rgba(0,212,255,0.3);
+    }
+    .video-play:hover { transform: scale(1.08); box-shadow: 0 0 60px rgba(0,212,255,0.5); }
+    .video-label {
+      margin-top: 16px; z-index: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* LESSON BODY */
+    .lesson-body { font-size: 16px; line-height: 1.85; color: var(--text); }
+    .lesson-body h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: 1px; color: #fff;
+      margin: 36px 0 12px; text-transform: uppercase;
+    }
+    .lesson-body h3::before {
+      content: '▸ '; color: var(--cyan);
+    }
+    .lesson-body p { margin-bottom: 16px; color: var(--muted); }
+    .lesson-body p strong { color: var(--text); font-weight: 600; }
+    .lesson-body ul { list-style: none; margin: 0 0 20px; }
+    .lesson-body ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding-left: 20px; position: relative;
+      color: var(--muted); font-size: 15px;
+    }
+    .lesson-body ul li::before { content: '▸'; position: absolute; left: 0; color: var(--cyan); font-size: 11px; top: 11px; }
+    .lesson-body ul li:last-child { border-bottom: none; }
+
+    .callout {
+      background: rgba(0,212,255,0.06);
+      border-left: 3px solid var(--cyan);
+      padding: 20px 24px; margin: 28px 0;
+      font-size: 15px; color: var(--text);
+    }
+    .callout strong { color: var(--cyan); }
+
+    .key-takeaways {
+      background: var(--deep);
+      border: 1px solid var(--card-border);
+      padding: 28px 32px; margin: 32px 0;
+    }
+    .key-takeaways h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; letter-spacing: 2px;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .takeaway-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 14px; color: var(--muted);
+    }
+    .takeaway-item:last-child { border-bottom: none; }
+    .takeaway-icon { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+
+    /* NAV ARROWS */
+    .lesson-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--card-border);
+      margin-top: 40px;
+    }
+    .nav-arrow {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 14px 24px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-arrow:hover { border-color: var(--cyan); color: var(--cyan); }
+    .nav-arrow:disabled { opacity: 0.3; cursor: default; }
+    .nav-arrow:disabled:hover { border-color: var(--card-border); color: var(--text); }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .main-content { margin-left: 0; }
+      .lesson-viewer { padding: 24px 20px; }
+      .menu-toggle { display: block; }
+      .topbar { padding: 12px 20px; }
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--deep); }
+    ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 3px; }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fadeIn 0.4s ease; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ LOGIN SCREEN ═══════════ -->
+  <div id="loginScreen">
+    <div class="login-bg"></div>
+    <div class="login-glow"></div>
+    <div class="login-box">
+      <div class="login-logo">LOOKSMAXXING <span>ASCENSION</span><span class="login-stamp">MOGGED</span></div>
+      <p class="login-sub">Enter the credentials sent to your email after purchase.</p>
+
+      <div class="form-group">
+        <label class="form-label" for="usernameInput">Username</label>
+        <input class="form-input" type="text" id="usernameInput" placeholder="your-username" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="passwordInput">Password</label>
+        <input class="form-input" type="password" id="passwordInput" placeholder="••••••••••" autocomplete="current-password"/>
+      </div>
+
+      <button class="login-btn" onclick="attemptLogin()">ACCESS COURSE →</button>
+      <div class="login-error" id="loginError">Incorrect username or password. Check your email for credentials.</div>
+
+      <p class="login-note">
+        Don't have an account? <a href="index.html" style="color:var(--cyan);text-decoration:none;">Purchase the course →</a><br>
+        Credentials are sent automatically after payment.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ COURSE APP ═══════════ -->
+  <div id="courseApp">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">ASCENSION <span>PORTAL</span><span class="sidebar-stamp">MOGGED</span></div>
+        <div class="sidebar-user">Logged in as <strong id="displayUser">student</strong></div>
+      </div>
+
+      <div class="sidebar-progress">
+        <div class="progress-label">
+          <span>Course Progress</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <!-- Generated by JS -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="logout()">↩ Log Out</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-breadcrumb" id="breadcrumb">
+          Module 1 · <span>Episode 1</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="mark-done-btn" id="markDoneBtn" onclick="markCurrentDone()">✓ Mark Complete</button>
+          <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+      </div>
+
+      <div class="lesson-viewer" id="lessonViewer">
+        <!-- Lesson content rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+  // ═══════════════════════════════════════════════════════
+  // CREDENTIALS — Add your students here.
+  // Format: { username: "...", password: "...", name: "..." }
+  // In production, replace this with a backend API call.
+  // ═══════════════════════════════════════════════════════
+  const VALID_USERS = [
+    { username: "demo",     password: "ascend2026",  name: "Demo Student" },
+    { username: "student1", password: "mogged2026",  name: "Student One" },
+    // Add more students here after purchase...
+  ];
+
+  // ═══════════════════════════════════════════════════════
+  // COURSE DATA — 13 modules, multiple lessons each
+  // ═══════════════════════════════════════════════════════
+  const COURSE = [
+    {
+      id: 1, title: "Mindset & The Ascension Framework",
+      lessons: [
+        { id: "1-1", title: "Intro to Looksmaxxing Ascension", duration: "8 min",
+          content: `intro` },
+        { id: "1-2", title: "Learn the tech-stack", duration: "12 min", content: `techstack` },
+        { id: "1-3", title: "Mindset mastery", duration: "15 min", content: `mindset` },
+        { id: "1-4", title: "The hierarchy of improvements", duration: "18 min", content: `hierarchy` },
+        { id: "1-5", title: "Building your baseline", duration: "10 min", content: `baseline` },
+      ]
+    },
+    {
+      id: 2, title: "Skincare Science & Routine Building",
+      lessons: [
+        { id: "2-1", title: "Skin biology basics", duration: "14 min", content: `skinbio` },
+        { id: "2-2", title: "The cleanser guide", duration: "11 min", content: `cleanser` },
+        { id: "2-3", title: "Moisturizers & barrier repair", duration: "13 min", content: `moisturizer` },
+        { id: "2-4", title: "SPF — the #1 anti-aging tool", duration: "9 min", content: `spf` },
+        { id: "2-5", title: "Introducing retinoids", duration: "16 min", content: `retinoids` },
+        { id: "2-6", title: "Vitamin C & antioxidants", duration: "12 min", content: `vitc` },
+        { id: "2-7", title: "AHA/BHA exfoliation", duration: "14 min", content: `exfoliation` },
+        { id: "2-8", title: "Your AM & PM routine", duration: "20 min", content: `ampm` },
+      ]
+    },
+    {
+      id: 3, title: "Facial Aesthetics & Facemaxxing",
+      lessons: [
+        { id: "3-1", title: "Understanding facial harmony", duration: "16 min", content: `facial_harmony` },
+        { id: "3-2", title: "Eyebrow grooming for your face shape", duration: "12 min", content: `eyebrows` },
+        { id: "3-3", title: "Under-eye care protocol", duration: "11 min", content: `undereye` },
+        { id: "3-4", title: "Jawline definition & fat loss", duration: "14 min", content: `jawline` },
+        { id: "3-5", title: "Mewing fundamentals", duration: "18 min", content: `mewing` },
+        { id: "3-6", title: "Masseter exercise protocol", duration: "10 min", content: `masseter` },
+      ]
+    },
+    {
+      id: 4, title: "Hair: Cut, Health & Hairline",
+      lessons: [
+        { id: "4-1", title: "Face shape theory for haircuts", duration: "13 min", content: `faceshape` },
+        { id: "4-2", title: "How to communicate with your barber", duration: "9 min", content: `barber` },
+        { id: "4-3", title: "Hair growth science & scalp health", duration: "15 min", content: `hairgrowth` },
+        { id: "4-4", title: "DHT, hair loss & prevention", duration: "17 min", content: `dht` },
+        { id: "4-5", title: "Thickening shampoos & topicals", duration: "11 min", content: `thickening` },
+      ]
+    },
+    {
+      id: 5, title: "Body Composition & Physique",
+      lessons: [
+        { id: "5-1", title: "Why cut first (above 15% BF)", duration: "14 min", content: `cutfirst` },
+        { id: "5-2", title: "The shoulder-to-waist ratio", duration: "12 min", content: `stwratio` },
+        { id: "5-3", title: "Training split for aesthetics", duration: "22 min", content: `trainingsplit` },
+        { id: "5-4", title: "Posture correction built into training", duration: "16 min", content: `posturetraining` },
+      ]
+    },
+    {
+      id: 6, title: "Nutrition for Looks",
+      lessons: [
+        { id: "6-1", title: "Macros for body recomposition", duration: "18 min", content: `macros` },
+        { id: "6-2", title: "Anti-inflammatory eating for clear skin", duration: "14 min", content: `antiinflammatory` },
+        { id: "6-3", title: "Hydration protocol", duration: "8 min", content: `hydration` },
+        { id: "6-4", title: "Evidence-based supplements", duration: "20 min", content: `supplements` },
+      ]
+    },
+    {
+      id: 7, title: "Grooming Mastery",
+      lessons: [
+        { id: "7-1", title: "Beard strategy for your jaw shape", duration: "15 min", content: `beard` },
+        { id: "7-2", title: "Dental care system", duration: "13 min", content: `dental` },
+        { id: "7-3", title: "Nail & hand hygiene", duration: "7 min", content: `nails` },
+        { id: "7-4", title: "Body hair management", duration: "10 min", content: `bodyhair` },
+        { id: "7-5", title: "Fragrance selection guide", duration: "12 min", content: `fragrance` },
+      ]
+    },
+    {
+      id: 8, title: "Style & Wardrobe Architecture",
+      lessons: [
+        { id: "8-1", title: "Fit over brand — always", duration: "14 min", content: `fitoverband` },
+        { id: "8-2", title: "Capsule wardrobe for your body type", duration: "19 min", content: `capsule` },
+        { id: "8-3", title: "Color theory for your skin tone", duration: "15 min", content: `colortheory` },
+        { id: "8-4", title: "Accessories that elevate", duration: "11 min", content: `accessories` },
+        { id: "8-5", title: "Shoes — the silent status signal", duration: "10 min", content: `shoes` },
+      ]
+    },
+    {
+      id: 9, title: "Posture, Body Language & Presence",
+      lessons: [
+        { id: "9-1", title: "The posture audit", duration: "12 min", content: `postureaudit` },
+        { id: "9-2", title: "Anterior pelvic tilt correction", duration: "14 min", content: `apttilt` },
+        { id: "9-3", title: "Forward head posture fix", duration: "13 min", content: `forwardhead` },
+        { id: "9-4", title: "Body language & spatial presence", duration: "17 min", content: `bodylang` },
+        { id: "9-5", title: "Eye contact & facial expression", duration: "11 min", content: `eyecontact` },
+      ]
+    },
+    {
+      id: 10, title: "Sleep Optimization",
+      lessons: [
+        { id: "10-1", title: "Sleep & skin — the science", duration: "13 min", content: `sleepskin` },
+        { id: "10-2", title: "The sleep protocol stack", duration: "15 min", content: `sleepstack` },
+        { id: "10-3", title: "Dark circles & puffiness elimination", duration: "10 min", content: `darkcircles` },
+      ]
+    },
+    {
+      id: 11, title: "Advanced: Softmaxxing Upgrades",
+      lessons: [
+        { id: "11-1", title: "Non-invasive dermatology overview", duration: "16 min", content: `derm` },
+        { id: "11-2", title: "Microdermabrasion & chemical peels", duration: "14 min", content: `micro` },
+        { id: "11-3", title: "Laser & light therapies", duration: "13 min", content: `laser` },
+        { id: "11-4", title: "The professional consultation guide", duration: "11 min", content: `consultation` },
+      ]
+    },
+    {
+      id: 12, title: "Progress Tracking & 12-Week System",
+      lessons: [
+        { id: "12-1", title: "Setting up your photo system", duration: "9 min", content: `photos` },
+        { id: "12-2", title: "The 12-week tracker walkthrough", duration: "18 min", content: `tracker` },
+        { id: "12-3", title: "Reading your own progress", duration: "14 min", content: `reading` },
+        { id: "12-4", title: "Adjusting the stack", duration: "12 min", content: `adjust` },
+      ]
+    },
+    {
+      id: 13, title: "Mental Edge & Long-Term Maintenance",
+      lessons: [
+        { id: "13-1", title: "Optimization without obsession", duration: "15 min", content: `obsession` },
+        { id: "13-2", title: "Confidence calibration", duration: "13 min", content: `confidence` },
+        { id: "13-3", title: "Identity & the new you", duration: "17 min", content: `identity` },
+        { id: "13-4", title: "The maintenance schedule for life", duration: "14 min", content: `maintenance` },
+        { id: "13-5", title: "Where to go from here", duration: "10 min", content: `next` },
+      ]
+    }
+  ];
+
+  // ═══════════════════════════════════════════════════════
+  // LESSON CONTENT MAP
+  // ═══════════════════════════════════════════════════════
+  const LESSON_CONTENT = {
+    intro: {
+      heading: "Intro to Looksmaxxing Ascension",
+      module: "Module 1 — Mindset & Framework",
+      body: `
+        <p>Welcome to <strong>Looksmaxxing Ascension</strong> — the most complete, evidence-based appearance improvement system available anywhere.</p>
+        <p>In this first lesson, I'm going to explain exactly what this course is, what it isn't, and the philosophy behind why this system works when everything else fails.</p>
+        <h3>What Looksmaxxing Actually Is</h3>
+        <p>Looksmaxxing is the systematic optimization of your appearance using every available legitimate tool — skincare, grooming, fitness, style, posture, sleep, and nutrition. It is <strong>not</strong> about chasing an impossible genetic ideal. It's about extracting maximum value from what you have.</p>
+        <p>The difference between a 5 and a 7 is not genetics 90% of the time — it's neglect vs. attention. This course teaches you how to pay attention systematically.</p>
+        <h3>The Three Rules of This Course</h3>
+        <ul>
+          <li>Evidence first — if there's no peer-reviewed support, we say so clearly</li>
+          <li>Stack thinking — every module compounds with every other module</li>
+          <li>Progress over perfection — consistency beats intensity every time</li>
+        </ul>
+        <div class="callout"><strong>Key principle:</strong> You are not trying to become someone else. You are trying to become the best-presented version of yourself. That distinction matters enormously for your psychology and your results.</div>
+        <h3>How to Use This Course</h3>
+        <p>Don't skip ahead. <strong>Modules 1–3 are non-negotiable</strong> — they establish the foundation everything else builds on. After Module 3, you can move in any order based on your highest leverage areas.</p>
+        <p>Use the 12-Week Tracker (Module 12) from day one. You will not believe your progress without objective documentation.</p>
+      `,
+      takeaways: [
+        "Looksmaxxing is systematic optimization, not genetic chasing",
+        "The gap between average and above-average is mostly effort and knowledge",
+        "Every module in this course compounds with the others",
+        "Start the 12-week progress photo system today — before you change anything"
+      ]
+    },
+    techstack: {
+      heading: "Learn the Tech-Stack",
+      module: "Module 1 — Mindset & Framework",
+      body: `
+        <p>The 'tech-stack' is your personal protocol — the combination of interventions you're running simultaneously. Understanding how to build and maintain your stack is what separates guys who get results from guys who spin their wheels for years.</p>
+        <h3>Why a Stack Approach Works</h3>
+        <p>Any single intervention has diminishing returns. Skincare alone might move you 10%. Training alone might move you another 10%. But the <strong>compounding effect</strong> of all systems running simultaneously is exponential, not additive.</p>
+        <p>Great skin + sharp hair + defined body + well-fitted clothes + confident posture = someone who looks 2–3 points higher than the sum of parts suggests.</p>
+        <h3>Building Your Initial Stack</h3>
+        <ul>
+          <li>Tier 1 (free, start today): Posture, sleep, grooming, water intake</li>
+          <li>Tier 2 ($30–80/month): Basic skincare routine, barber visits, gym membership</li>
+          <li>Tier 3 ($100–300/month): Advanced actives, wardrobe upgrades, professional grooming</li>
+          <li>Tier 4 (discretionary): Professional dermatology, laser, injectable options</li>
+        </ul>
+        <div class="callout"><strong>Most guys skip Tier 1 entirely</strong> and jump to Tier 3. This is a catastrophic mistake. Tier 1 free interventions often produce more visible change than expensive skincare.</div>
+        <h3>The Stack Audit</h3>
+        <p>At the end of Module 1, you'll run a full stack audit — an honest assessment of where you're currently at on every dimension. This becomes your baseline document. Save it. You'll look back at it in 12 weeks.</p>
+      `,
+      takeaways: [
+        "Your stack is your combination of active interventions running simultaneously",
+        "Start with Tier 1 free interventions before spending anything",
+        "Compound effects across systems outperform single-variable optimization",
+        "Document your baseline before making any changes"
+      ]
+    },
+    mindset: {
+      heading: "Mindset Mastery",
+      module: "Module 1 — Mindset & Framework",
+      body: `
+        <p>The most important variable in your transformation is not your genetics, your budget, or your starting point. It is your relationship with the process itself.</p>
+        <h3>Identity-Based vs. Outcome-Based Thinking</h3>
+        <p>Most guys approach looksmaxxing with outcome-based thinking: "I want to look better." This creates a finish line — and when you don't cross it fast enough, you quit.</p>
+        <p><strong>Identity-based thinking</strong> is different: "I am someone who takes care of their appearance." That identity doesn't have a finish line. It generates consistent behavior that compounds over years, not weeks.</p>
+        <h3>The Obsession Trap</h3>
+        <p>There is a real danger in appearance optimization — the feedback loop of diminishing returns and increasing fixation. We will address this formally in Module 13, but understand it now: <strong>the goal is optimization, not perfection.</strong></p>
+        <p>Set a maintenance threshold. Once you've reached it, the goal shifts from building to maintaining. Most of your mental energy should be on life, not your appearance.</p>
+        <h3>Dealing with Slow Progress</h3>
+        <ul>
+          <li>Skin takes 6–12 weeks to show significant change — this is biology, not failure</li>
+          <li>Body composition changes require 8–16 weeks to become visually obvious</li>
+          <li>Trust the process and your weekly photo documentation</li>
+          <li>Compare yourself to last month, not last week</li>
+        </ul>
+        <div class="callout"><strong>The compound effect is invisible until it isn't.</strong> Nothing seems to be happening for weeks — then suddenly, multiple changes converge and people start treating you differently. This is the inflection point. Almost everyone quits before reaching it.</div>
+      `,
+      takeaways: [
+        "Identity-based thinking creates lasting behavior; outcome-based thinking creates burnout",
+        "Set a maintenance threshold to avoid obsession loops",
+        "Expect 6–12 weeks before visible skin changes — stay consistent",
+        "Document with photos monthly, not weekly — weekly is too noisy"
+      ]
+    },
+    hierarchy: {
+      heading: "The Hierarchy of Improvements",
+      module: "Module 1 — Mindset & Framework",
+      body: `
+        <p>Not all interventions are created equal. Understanding the hierarchy prevents you from spending three months optimizing your moisturizer while ignoring the fact that you're 25% body fat.</p>
+        <h3>Tier A — Maximum Leverage</h3>
+        <p>These changes have the highest ROI per unit of effort or money:</p>
+        <ul>
+          <li><strong>Body fat reduction</strong> — reveals facial structure, improves every other metric</li>
+          <li><strong>Posture correction</strong> — free, immediate, affects clothes fit and facial perception</li>
+          <li><strong>Basic skincare</strong> — cleanser, moisturizer, SPF produces 80% of skin benefit</li>
+          <li><strong>Haircut optimization</strong> — a proper cut for your face shape is transformative</li>
+        </ul>
+        <h3>Tier B — Strong Secondary Returns</h3>
+        <ul>
+          <li>Sleep optimization (directly affects skin texture, eye area, energy)</li>
+          <li>Wardrobe upgrade (fit and color theory)</li>
+          <li>Grooming system (beard, nails, fragrance)</li>
+          <li>Resistance training (shoulder-to-waist ratio)</li>
+        </ul>
+        <h3>Tier C — Fine-Tuning</h3>
+        <ul>
+          <li>Advanced skincare actives (retinoids, vitamin C)</li>
+          <li>Facial exercises (mewing, masseter work)</li>
+          <li>Professional dermatology treatments</li>
+          <li>Niche grooming upgrades</li>
+        </ul>
+        <div class="callout"><strong>Work top-down.</strong> Don't spend $200 on skincare actives while neglecting the gym or sleeping 5 hours. Tier C built on a weak Tier A foundation is wasted money.</div>
+      `,
+      takeaways: [
+        "Body fat is the single highest-leverage intervention for most men",
+        "Posture is free and affects nearly every other improvement area",
+        "Work Tier A before spending money on Tier C",
+        "The hierarchy prevents expensive micro-optimization of the wrong variables"
+      ]
+    },
+    skinbio: {
+      heading: "Skin Biology Basics",
+      module: "Module 2 — Skincare Science",
+      body: `
+        <p>To use skincare products intelligently, you need to understand what you're working with. Your skin is your largest organ and a living system — understanding how it works helps you avoid common mistakes that waste money and time.</p>
+        <h3>The Three Layers</h3>
+        <ul>
+          <li><strong>Epidermis</strong> — the outer layer, where most topical products act. Contains the skin barrier.</li>
+          <li><strong>Dermis</strong> — contains collagen, elastin, and blood vessels. Target of retinoids and deeper treatments.</li>
+          <li><strong>Hypodermis</strong> — subcutaneous fat layer, largely inaccessible to topicals.</li>
+        </ul>
+        <h3>The Skin Barrier</h3>
+        <p>The stratum corneum (outermost layer) is your skin's waterproof barrier. A healthy barrier holds moisture in, keeps irritants out. <strong>Most skin problems — acne, sensitivity, dehydration — trace back to a compromised barrier.</strong></p>
+        <h3>Skin Cell Turnover</h3>
+        <p>Your skin replaces its outer cells approximately every 28 days (this slows significantly with age). Most actives work by accelerating or regulating this process. This is why changes take time — you're waiting on biology.</p>
+        <div class="callout"><strong>The barrier-first principle:</strong> Every skincare routine should prioritize barrier health before any active treatment. A compromised barrier makes actives penetrate too aggressively and causes irritation that reverses your progress.</div>
+        <h3>Skin Types vs. Skin Conditions</h3>
+        <p>Most guys misidentify their skin type. Oily skin and dehydrated skin produce the same surface symptoms (shine, clogged pores) but require opposite treatments. We'll help you diagnose your actual skin type vs. condition in the next lesson.</p>
+      `,
+      takeaways: [
+        "The stratum corneum barrier is the foundation of all skin health",
+        "Skin cell turnover takes ~28 days — expect 6–8 weeks for visible results from new products",
+        "Prioritize barrier health before adding actives",
+        "Oily and dehydrated skin look similar but need opposite treatment approaches"
+      ]
+    },
+    retinoids: {
+      heading: "Introducing Retinoids",
+      module: "Module 2 — Skincare Science",
+      body: `
+        <p>Retinoids are the single most evidence-backed class of skincare ingredient in existence. If you add only one active to your routine after this course, make it a retinoid.</p>
+        <h3>What Retinoids Do</h3>
+        <ul>
+          <li>Accelerate cell turnover — speeds up the 28-day cycle</li>
+          <li>Stimulate collagen production in the dermis</li>
+          <li>Reduce melanin production — fades dark spots and hyperpigmentation</li>
+          <li>Regulate sebum — reduces acne over time</li>
+          <li>Thickens the dermis — reduces the appearance of fine lines</li>
+        </ul>
+        <h3>The Retinoid Ladder</h3>
+        <p>Start at the bottom and work up:</p>
+        <ul>
+          <li><strong>Retinol</strong> (OTC) — start here. 0.025% → 0.05% → 0.1% over 3–6 months</li>
+          <li><strong>Retinaldehyde</strong> (OTC) — more potent, less irritating than retinol. Good middle option.</li>
+          <li><strong>Tretinoin</strong> (prescription) — the gold standard. 0.025% → 0.05% → 0.1%</li>
+          <li><strong>Adapalene</strong> (OTC in many countries) — great for acne-prone skin, less anti-aging data</li>
+        </ul>
+        <div class="callout"><strong>Retinization period:</strong> The first 4–8 weeks bring purging, dryness, and peeling. This is normal. It means the product is working. Moisturize aggressively and start with 2x per week before increasing frequency.</div>
+        <h3>The Buffer Method</h3>
+        <p>Apply moisturizer first, wait 5–10 minutes, then apply retinoid on top. This slows penetration and reduces irritation dramatically — especially in the first month.</p>
+        <h3>Non-Negotiable: SPF During Retinoid Use</h3>
+        <p>Retinoids make skin photosensitive. Using retinoids without daily SPF30+ is counterproductive. This is why the SPF lesson comes first.</p>
+      `,
+      takeaways: [
+        "Retinoids are the most evidence-backed skincare active available — use them",
+        "Start with OTC retinol, work up the ladder over months",
+        "Purging in weeks 1–6 is normal and expected — don't quit",
+        "SPF daily is non-negotiable when using retinoids"
+      ]
+    }
+  };
+
+  // Fill missing lesson content with a template
+  COURSE.forEach(mod => {
+    mod.lessons.forEach(lesson => {
+      if (!LESSON_CONTENT[lesson.content]) {
+        LESSON_CONTENT[lesson.content] = {
+          heading: lesson.title,
+          module: `Module ${mod.id} — ${mod.title}`,
+          body: `
+            <p>This lesson is part of <strong>${mod.title}</strong>. The content for <em>${lesson.title}</em> covers the core principles and practical application relevant to this module.</p>
+            <h3>Core Concepts</h3>
+            <p>In this ${lesson.duration} lesson, you'll learn evidence-based techniques and build actionable habits around <strong>${lesson.title.toLowerCase()}</strong>.</p>
+            <ul>
+              <li>Understanding the science behind this topic</li>
+              <li>Identifying your personal starting point</li>
+              <li>Building a sustainable practice</li>
+              <li>Avoiding common mistakes in this area</li>
+            </ul>
+            <div class="callout"><strong>Action item:</strong> Complete the exercise from this lesson and log your baseline in the 12-Week Tracker before moving to the next lesson.</div>
+            <h3>Practical Application</h3>
+            <p>Every concept in this course is designed to be immediately actionable. By the end of this lesson, you'll have a specific, concrete task to implement today — not someday.</p>
+          `,
+          takeaways: [
+            `Master the core framework for ${lesson.title.toLowerCase()}`,
+            "Apply evidence-based principles from this lesson immediately",
+            "Track your starting point in the 12-Week Tracker",
+            "Return to this lesson after 4 weeks to reassess"
+          ]
+        };
+      }
+    });
+  });
+
+  // ═══════════════════════════════════════════════════════
+  // APP STATE
+  // ═══════════════════════════════════════════════════════
+  let state = {
+    user: null,
+    completed: new Set(),
+    currentLesson: null
+  };
+
+  const totalLessons = COURSE.reduce((a, m) => a + m.lessons.length, 0);
+
+  // ═══════════════════════════════════════════════════════
+  // LOGIN
+  // ═══════════════════════════════════════════════════════
+  function attemptLogin() {
+    const username = document.getElementById('usernameInput').value.trim();
+    const password = document.getElementById('passwordInput').value;
+    const match = VALID_USERS.find(u => u.username === username && u.password === password);
+    if (match) {
+      state.user = match;
+      const saved = sessionStorage.getItem('completed_' + username);
+      if (saved) state.completed = new Set(JSON.parse(saved));
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('courseApp').classList.add('show');
+      document.getElementById('displayUser').textContent = match.name;
+      buildSidebar();
+      loadLesson(COURSE[0].lessons[0]);
+    } else {
+      document.getElementById('loginError').classList.add('show');
+    }
+  }
+
+  // Enter key on password
+  document.getElementById('passwordInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptLogin();
+  });
+  document.getElementById('usernameInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('passwordInput').focus();
+  });
+
+  function logout() {
+    state.user = null;
+    state.completed = new Set();
+    state.currentLesson = null;
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('courseApp').classList.remove('show');
+    document.getElementById('usernameInput').value = '';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('loginError').classList.remove('show');
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // SIDEBAR BUILDER
+  // ═══════════════════════════════════════════════════════
+  function buildSidebar() {
+    const nav = document.getElementById('sidebarNav');
+    nav.innerHTML = '';
+    COURSE.forEach((mod, mi) => {
+      const completedInMod = mod.lessons.filter(l => state.completed.has(l.id)).length;
+      const group = document.createElement('div');
+      group.className = 'module-group' + (mi === 0 ? ' open' : '');
+      group.innerHTML = `
+        <button class="module-header-btn" onclick="toggleModule(this)">
+          <div class="mod-num">${String(mod.id).padStart(2,'0')}</div>
+          <div class="mod-info">
+            <div class="mod-name">${mod.title}</div>
+            <div class="mod-progress">${completedInMod}/${mod.lessons.length} complete</div>
+          </div>
+          <span class="mod-chevron">▶</span>
+        </button>
+        <div class="lessons-list">
+          ${mod.lessons.map(lesson => `
+            <button class="lesson-btn" id="btn-${lesson.id}" onclick="loadLesson(${JSON.stringify(lesson).replace(/"/g, '&quot;')})">
+              <div class="lesson-check ${state.completed.has(lesson.id) ? 'done' : ''}" id="check-${lesson.id}">
+                ${state.completed.has(lesson.id) ? '✓' : ''}
+              </div>
+              <div class="lesson-title">${lesson.title}</div>
+            </button>
+          `).join('')}
+        </div>
+      `;
+      nav.appendChild(group);
+    });
+    updateProgress();
+  }
+
+  function toggleModule(btn) {
+    const group = btn.parentElement;
+    const isOpen = group.classList.contains('open');
+    document.querySelectorAll('.module-group').forEach(g => g.classList.remove('open'));
+    if (!isOpen) group.classList.add('open');
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // LESSON LOADER
+  // ═══════════════════════════════════════════════════════
+  function loadLesson(lesson) {
+    state.currentLesson = lesson;
+    const content = LESSON_CONTENT[lesson.content];
+
+    // Update active states
+    document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + lesson.id);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      // Open parent module
+      const group = activeBtn.closest('.module-group');
+      document.querySelectorAll('.module-group').forEach(g => g.classList.remove('open'));
+      if (group) group.classList.add('open');
+    }
+
+    // Update breadcrumb
+    const modId = lesson.id.split('-')[0];
+    const mod = COURSE.find(m => m.id == modId);
+    document.getElementById('breadcrumb').innerHTML = `${mod ? mod.title : 'Module'} · <span>${lesson.title}</span>`;
+
+    // Update mark done button
+    const doneBtn = document.getElementById('markDoneBtn');
+    if (state.completed.has(lesson.id)) {
+      doneBtn.textContent = '✓ Completed';
+      doneBtn.classList.add('done');
+    } else {
+      doneBtn.textContent = '✓ Mark Complete';
+      doneBtn.classList.remove('done');
+    }
+
+    // Find prev/next
+    const allLessons = COURSE.flatMap(m => m.lessons);
+    const idx = allLessons.findIndex(l => l.id === lesson.id);
+    const prev = idx > 0 ? allLessons[idx - 1] : null;
+    const next = idx < allLessons.length - 1 ? allLessons[idx + 1] : null;
+
+    // Render viewer
+    const viewer = document.getElementById('lessonViewer');
+    viewer.innerHTML = `
+      <div class="fade-in">
+        <p class="lesson-eyebrow">${content.module}</p>
+        <h1 class="lesson-heading">${content.heading}</h1>
+        <div class="lesson-meta">
+          <div class="lesson-meta-item">⏱ <span>${lesson.duration}</span></div>
+          <div class="lesson-meta-item">📁 <span>${state.completed.has(lesson.id) ? 'Completed' : 'In Progress'}</span></div>
+        </div>
+
+        <div class="video-container">
+          <div class="video-play">▶</div>
+          <div class="video-label">Upload your video to display here</div>
+        </div>
+
+        <div class="lesson-body">${content.body}</div>
+
+        <div class="key-takeaways">
+          <h4>★ Key Takeaways</h4>
+          ${content.takeaways.map(t => `
+            <div class="takeaway-item">
+              <span class="takeaway-icon">★</span>
+              <span>${t}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="lesson-nav">
+          <button class="nav-arrow" onclick="loadLesson(${prev ? JSON.stringify(prev).replace(/"/g,'&quot;') : 'null'})" ${!prev ? 'disabled' : ''}>
+            ← Previous
+          </button>
+          <button class="nav-arrow" onclick="markAndNext()" style="background:rgba(0,212,255,0.1); border-color:var(--cyan); color:var(--cyan);">
+            Mark Done & Next →
+          </button>
+          <button class="nav-arrow" onclick="loadLesson(${next ? JSON.stringify(next).replace(/"/g,'&quot;') : 'null'})" ${!next ? 'disabled' : ''}>
+            Next →
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Scroll to top
+    viewer.parentElement.scrollTop = 0;
+    window.scrollTo(0, 0);
+
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('mobile-open');
+  }
+
+  function markCurrentDone() {
+    if (!state.currentLesson) return;
+    const id = state.currentLesson.id;
+    if (state.completed.has(id)) {
+      state.completed.delete(id);
+    } else {
+      state.completed.add(id);
+    }
+    saveProgress();
+    buildSidebar();
+    // Re-highlight current
+    const btn = document.getElementById('btn-' + id);
+    if (btn) btn.classList.add('active');
+
+    const doneBtn = document.getElementById('markDoneBtn');
+    if (state.completed.has(id)) {
+      doneBtn.textContent = '✓ Completed';
+      doneBtn.classList.add('done');
+    } else {
+      doneBtn.textContent = '✓ Mark Complete';
+      doneBtn.classList.remove('done');
+    }
+  }
+
+  function markAndNext() {
+    if (!state.currentLesson) return;
+    state.completed.add(state.currentLesson.id);
+    saveProgress();
+    // Find next
+    const allLessons = COURSE.flatMap(m => m.lessons);
+    const idx = allLessons.findIndex(l => l.id === state.currentLesson.id);
+    if (idx < allLessons.length - 1) {
+      buildSidebar();
+      loadLesson(allLessons[idx + 1]);
+    } else {
+      buildSidebar();
+      markCurrentDone();
+    }
+  }
+
+  function saveProgress() {
+    if (state.user) {
+      sessionStorage.setItem('completed_' + state.user.username, JSON.stringify([...state.completed]));
+    }
+  }
+
+  function updateProgress() {
+    const pct = Math.round((state.completed.size / totalLessons) * 100);
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function toggleMobileMenu() {
+    document.getElementById('sidebar').classList.toggle('mobile-open');
+  }
+  </script>
+</body>
+</html>
